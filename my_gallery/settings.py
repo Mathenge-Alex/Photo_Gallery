@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
     # Added Apps
     'photos',
-    'claudinary',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
