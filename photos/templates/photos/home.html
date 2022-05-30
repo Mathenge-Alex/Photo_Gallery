@@ -1,9 +1,66 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{{base.super}}
     <title>Gallery-Home</title>
 {% include "navbar.html" %}
 
 
 {% block content %}
-    <h1>Enjoy Great Photos Here</h1>
+
+    <h1 class="text-center">Welcome To My Gallery. Enjoy Great Photos Here</h1>
     
+    <div class="container-fluid">
+
+        <br />
+    
+        <div class="row p-0 mt-1">
+        <div class="img-container p-3">
+            {% for photo in photos %} 
+            {%if photo.image%}
+    
+            <div class="image col-md-4">
+                <div class="image-cont">
+                    <img src="{{photo.image.url}}" alt="img" data-bs-toggle="modal" data-bs-target="#{{ photo }}" style="height: 12rem;"/>
+                </div>
+            </div>
+    
+            {%endif%}
+    
+            <div class="modal fade" id="{{photo}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header m-0 p-2">
+                        <h4 class="modal-title" id="{{photo.id}}">{{photo}}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body m-0 p-3">
+                        {%if photo.image%}
+                        <div class="modal-photo">
+                        <img src="{{photo.image.url}}" alt="img" data-bs-toggle="modal" data-bs-target="#{{ photo }}" />
+                        </div>
+                        <p class="text-center mt-2">{{photo.description}}</p>
+                        <div class="tag mb-2">
+                        <h5 class="text-info">Category: {{photo.category}}</h5>
+                        <h5 class="text-primary">Location: {{photo.location}}</h5>
+                        </div>
+        
+                        {%endif%}
+        
+                        <div class="d-flex mb-4">
+                        <input class="form-control input-lg mr-1" type="text" value="{{photo.image.url}}"
+                            id="moz{{photo.id}}.url" />
+                        <button class="btn btn-info btn-sm mr-1" onclick="mycopyFunc('moz{{photo.id}}.url')">
+                            <i class="far fa-copy">copy</i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" aria-label="Close">
+                            X
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+    
+            {%endfor%}
+        </div>
+        </div>
+    </div>
 {% endblock %}
