@@ -1,5 +1,4 @@
 from django.db import models
-import datetime as dt
 from cloudinary.models import CloudinaryField
 # import cloudinary
 # import cloudinary.uploader
@@ -8,7 +7,7 @@ from cloudinary.models import CloudinaryField
 # Category Model for different categories of pictures
 class Category(models.Model):
     
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
@@ -25,7 +24,7 @@ class Category(models.Model):
 
 # Location Model
 class Location(models.Model):
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=30)
     
     
     def __str__(self):
@@ -43,7 +42,7 @@ class Location(models.Model):
 
 class Image(models.Model):
     image = CloudinaryField('image')
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=30)
     upload_date = models.DateTimeField(auto_now_add=True)
     description = models.TextField(null=True)
     location = models.ForeignKey(Location ,on_delete=models.CASCADE)
@@ -73,6 +72,7 @@ class Image(models.Model):
         image = cls.objects.filter(id=id).all()
         return image
 
+# Ordering by upload date
     class Meta:
         ordering = ['-upload_date']
 
