@@ -45,3 +45,13 @@ def search_results(request):
         return render(request, 'photos/search.html',{"message":message})
 
 
+def query_image(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    images = Image.objects.filter(
+        Q(category__name__icontains = q) |
+        Q(name__icontains = q) |
+        Q(description__icontains = q)
+        ) 
+    message = f"{q}"
+    return render(request, 'photos/search.html',{"message":message,"photos": images})
+
