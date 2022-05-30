@@ -55,3 +55,12 @@ def query_image(request):
     message = f"{q}"
     return render(request, 'photos/search.html',{"message":message,"photos": images})
 
+def filter_location(request,location_id):
+    try:
+        locations = {'1':"Kenya",'2':"USA",'3':"Canada",'4':"China",'5':"Bahamas"}   
+    
+        filtered_photos = Image.objects.filter(location__name__icontains=locations.get(str(location_id))) 
+        message = f"{locations.get(location_id)}"
+    except  ObjectDoesNotExist:
+        raise Http404()
+    return render(request,'photos/filter_location.html',{"message":message,"photos": filtered_photos})
