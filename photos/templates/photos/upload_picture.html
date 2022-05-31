@@ -2,7 +2,7 @@
 {% load bootstrap4 %} 
 {% block content %}
 
-<div class="container-fluid bg-form" >
+<div class="container-fluid bg-form mx-5 mb-5" style="height:10vh; width: 55%; margin: 0 auto;">
   <div class="form-container image-upload ">
     <form action="{%url 'upload_picture' %}" method="post" enctype="multipart/form-data">
       {%csrf_token%} 
