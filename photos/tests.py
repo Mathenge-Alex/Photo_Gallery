@@ -39,3 +39,41 @@ class CategoryTestClass(TestCase):
         self.category.update_category(self.category.id,new_name)
         update = Category.objects.get(name="Tech")
         self.assertEquals(update.name,"Tech")
+
+    
+    # Location Tests
+class LocationTestClass(TestCase):
+
+        #setting up
+    def setUp(self):
+        self.location = Location(name='Kisumu')
+        self.location.save_location()
+        
+        # Delete all locations
+    def tearDown(self):
+        Location.objects.all().delete()
+    
+        # Instance of a location
+    def test_instance(self):
+        self.assertTrue(isinstance(self.location,Location))
+        
+        # Saving a location
+    def test_save_method(self):
+        self.location.save_location()
+        locations= Location.objects.all()
+        self.assertTrue(len(locations) > 0)
+        
+        # Deleting a location
+    def test_delete_method(self):
+        self.location.save_location()
+        self.location.delete_location()
+        locations = Location.objects.all()
+        self.assertTrue(len(locations) == 0)
+    
+        # Updating a Location
+    def test_update_location(self):
+        self.location.save_location()
+        new_name="Malindi"
+        self.location.update_location(self.location.id,new_name)
+        update = Location.objects.get(name='Malindi')
+        self.assertEquals(update.name,"Malindi")
