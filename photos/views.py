@@ -7,6 +7,8 @@ from .forms import UploadForm
 from .models import Image
 from django.db.models.base import ObjectDoesNotExist
 from django.http  import Http404
+import pyperclip as clip
+
 # Create your views here.
 
 
