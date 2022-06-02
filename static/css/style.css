@@ -4,3 +4,10 @@ height: 60vh;
 .bg-form{
     background-image: url();
 }
+.image {
+    display: block;
+    max-width:12rem;
+    max-height:12rem;
+    width: auto;
+    height: auto;
+}
