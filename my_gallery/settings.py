@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['flood-gallery.herokuapp.com']
 
@@ -135,6 +135,8 @@ STATICFILES_DIRS = [
 ]
 
 
+STATIC_ROOT = BASE_DIR/'staticfiles'
+
 import os
 
 #Extra Collectstatic
@@ -153,3 +155,6 @@ cloudinary.config(
     api_secret = config('api_secret'),
     secure = True
     )
+
+import django_heroku
+django_heroku.settings(locals())
