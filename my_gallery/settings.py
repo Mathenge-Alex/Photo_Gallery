@@ -32,8 +32,9 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['flood-gallery.herokuapp.com']
-CSRF_TRUSTED_ORIGINS=['https://flood-gallery.herokuapp.com/']
+ALLOWED_HOSTS = []
+
+CSRF_TRUSTED_ORIGINS=['https://flood-gallery.herokuapp.com']
 
 
 # Application definition
