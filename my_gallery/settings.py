@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['flood-gallery.herokuapp.com']
 
@@ -93,6 +93,28 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# development
+# if config('MODE')=="dev":
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': config('DB_NAME'),
+#             'USER': config('DB_USER'),
+#             'PASSWORD': config('DB_PASSWORD'),
+#             'HOST': config('DB_HOST'),
+#             'PORT': '',
+#         }
+        
+#     }
+#     # production
+# else:
+#     DATABASES = {
+#         'default': dj_database_url.config(
+#             default=config('DATABASE_URL')
+#         )
+#     }
+
 
 
 # Password validation
