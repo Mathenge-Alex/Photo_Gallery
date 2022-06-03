@@ -34,7 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CSRF=['https://flood-gallery.herokuapp.com/']
+CSRF_TRUSTED_ORIGINS=['https://flood-gallery.herokuapp.com/']
 
 
 # Application definition
