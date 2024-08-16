@@ -1,43 +1,118 @@
 {% extends 'base.html' %}
 
+{% load form_tags %}
+
 {% block title %}Upload Image | Photo Gallery{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <h2 class="my-5 text-center">Upload Your Image</h2>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="form-group">
-        {{ form.image.label_tag }}
-        {{ form.image }}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header text-white">
+          <h3 class="card-title mb-0 text-center">Upload Your Image</h3>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.image.label_tag }}
+                  {{ form.image|add_class:"form-control form-control-lg" }}
+                </div>
+                <div class="form-group">
+                  {{ form.name.label_tag }}
+                  {{ form.name|add_class:"form-control form-control-lg" }}
+                </div>
+                <div class="form-group">
+                  {{ form.description.label_tag }}
+                  {{ form.description|add_class:"form-control form-control-lg" }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.category.label_tag }}
+                  {{ form.category|add_class:"form-control form-control-lg" }}
+                </div>
+                <div class="form-group">
+                  {{ form.new_category.label_tag }}
+                  {{ form.new_category|add_class:"form-control form-control-lg" }}
+                </div>
+                <div class="form-group">
+                  {{ form.location.label_tag }}
+                  {{ form.location|add_class:"form-control form-control-lg" }}
+                </div>
+                <div class="form-group">
+                  {{ form.new_location.label_tag }}
+                  {{ form.new_location|add_class:"form-control form-control-lg" }}
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-lg mt-3">Upload</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="form-group">
-        {{ form.name.label_tag }}
-        {{ form.name }}
-      </div>
-      <div class="form-group">
-        {{ form.description.label_tag }}
-        {{ form.description }}
-      </div>
-      <div class="form-group">
-        {{ form.category.label_tag }}
-        {{ form.category }}
-      </div>
-      <div class="form-group">
-        {{ form.new_category.label_tag }}
-        {{ form.new_category }}
-      </div>
-      <div class="form-group">
-        {{ form.location.label_tag }}
-        {{ form.location }}
-      </div>
-      <div class="form-group">
-        {{ form.new_location.label_tag }}
-        {{ form.new_location }}
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Upload</button>
-    </form>
+    </div>
   </div>
 </div>
+
+<style>
+  .form-control-lg {
+    max-height: calc(2.875rem + 2px);
+    font-size: 1.25rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .card {
+    border-radius: 10px;
+  }
+
+  .card-header {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 10px;
+    background-color: #343a40;
+    border-radius: 20px;
+
+    /* Adjusted background color for better visibility */
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Dark Mode Styles */
+  body.dark-mode{
+    color: #000000;
+  }
+  body.dark-mode .card{
+    background-color: #000000;
+  }
+  body.dark-mode .card-header {
+    background-color: #4a4a4a;
+    /* Adjusted for dark mode */
+  }
+
+  body.dark-mode .form-control {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+  }
+
+  body.dark-mode label {
+    color: #f5f5f5;
+    /* Make label text visible in dark mode */
+  }
+
+  body.dark-mode .btn-primary {
+    background-color: #4a4a4a;
+    border-color: #4a4a4a;
+  }
+
+  body.dark-mode .bg-primary {
+    background: #000000;
+  }
+</style>
 {% endblock %}
