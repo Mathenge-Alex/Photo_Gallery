@@ -1,63 +1,20 @@
-{% extends "base.html" %}{{base.super}}
-    <title>Gallery-Home</title>
-{% include "navbar.html" %}
+{% extends 'base.html' %}
 
+{% block title %}Home | Photo Gallery{% endblock %}
 
 {% block content %}
-
-    <h1 class="text-center">Welcome To My Gallery. Enjoy Great Photos Here</h1>
-    
-    <div class="container-fluid">
-
-        <br />
-    
-        <div class="row p-0 mt-1">
-        <div class="img-container p-3">
-            {% for photo in photos %} 
-            {%if photo.image%}
-            
-            <div class="image col-md-4">
-                <div class="image-cont">
-                    <img src="{{photo.image.url}}" alt="img" data-bs-toggle="modal" data-bs-target="#{{ photo }}" style="height: 12rem;"/>
-                </div>
-            </div>
-    
-            {%endif%}
-    
-            <div class="modal fade" id="{{photo}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header m-0 p-2">
-                        <h4 class="modal-title" id="{{photo.id}}">{{photo}}</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body m-0 p-3">
-                        {%if photo.image%}
-                        <div class="modal-photo">
-                        <img src="{{photo.image.url}}" alt="img" data-bs-toggle="modal" data-bs-target="#{{ photo }}" />
-                        </div>
-                        <p class="text-center mt-2">{{photo.description}}</p>
-                        
-                        <hr>
-
-                        <div class="tag mb-2">
-                        <small class="text-black justify-content-space-around"><span>Category: {{photo.category}}</span> &nbsp;&nbsp;<span>Location: {{photo.location}}</span></small>
-                        </div>
-
-                        <hr>
-        
-                        {%endif%}
-        
-                        <div class="d-flex mb-4 text-center">
-                    
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-    
-            {%endfor%}
+<h1 class="my-5 text-center">Explore Our Collections</h1>
+{% for category, images in images_by_category.items %}
+<section class="category-section">
+    <h2>{{ category }}</h2>
+    <div class="image-grid">
+        {% for image in images %}
+        <div class="image-item">
+            <img src="{{ image.image.url }}" alt="{{ image.name }}">
+            <p class="text-center mt-2">{{ image.name }}</p>
         </div>
-        </div>
+        {% endfor %}
     </div>
+</section>
+{% endfor %}
 {% endblock %}
