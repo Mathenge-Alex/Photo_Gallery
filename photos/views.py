@@ -11,12 +11,13 @@ def upload_image(request):
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            if request.is_ajax():
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({"message": "Image uploaded successfully!"})
             return redirect('home')
     else:
         form = ImageUploadForm()
     return render(request, 'upload.html', {'form': form})
+
 
 def home(request):
     categories = Category.objects.all()
