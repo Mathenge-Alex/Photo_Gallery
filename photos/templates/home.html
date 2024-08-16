@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | Photo Gallery{% endblock %}
+
+{% block content %}
+<h1 class="my-5 text-center">Explore Our Collections</h1>
+{% for category, images in images_by_category.items %}
+<section class="category-section">
+    <h2>{{ category }}</h2>
+    <div class="image-grid">
+        {% for image in images %}
+        <div class="image-item">
+            <img src="{{ image.image.url }}" alt="{{ image.name }}">
+            <p class="text-center mt-2">{{ image.name }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+{% endblock %}
