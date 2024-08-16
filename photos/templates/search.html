@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results | Photo Gallery{% endblock %}
+
+{% block content %}
+<h1 class="my-5 text-center">Search Results</h1>
+<div class="image-grid">
+  {% for image in images %}
+  <div class="image-item">
+    <img src="{{ image.image.url }}" alt="{{ image.name }}">
+    <p class="text-center mt-2">{{ image.name }}</p>
+  </div>
+  {% empty %}
+  <p class="text-center">No images found matching your search criteria.</p>
+  {% endfor %}
+</div>
+{% endblock %}
