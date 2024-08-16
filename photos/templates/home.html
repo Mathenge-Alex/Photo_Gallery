@@ -3,17 +3,78 @@
 {% block title %}Home | Photo Gallery{% endblock %}
 
 {% block content %}
+<style>
+    .image-item {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .copy-link-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        outline: 1px solid rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 5px 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: color 0.3s, outline 0.3s;
+        display: flex;
+        align-items: center;
+    }
+
+    .copy-link-button:hover {
+        color: rgba(255, 255, 255, 1);
+        outline: 1px solid rgba(255, 255, 255, 1);
+    }
+
+    .copy-link-button i {
+        margin-right: 5px;
+        font-size: 1rem;
+    }
+
+    .image-item img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pagination .page-links a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .pagination .page-links .current {
+        font-weight: bold;
+    }
+</style>
 <h1 class="my-5 text-center">Explore Our Collections</h1>
 
 {% for category, images in images_by_category.items %}
-<section class="category-section">
+<section class="category-section" id="section-{{ category }}">
     <h2>{{ category }}</h2>
     <div class="image-grid">
         {% for image in images %}
-        <div class="image-item position-relative" data-toggle="modal" data-target="#imageModal{{ image.id }}">
-            <img src="{{ image.image.url }}" alt="{{ image.name }}" loading="lazy">
+        <div class="image-item position-relative">
+            <img src="{{ image.image.url }}" alt="{{ image.name }}" loading="lazy" data-toggle="modal"
+                data-target="#imageModal{{ image.id }}">
             <!-- Copy Link Button -->
-            <button class="copy-link-button" onclick="copyLink('{{ image.image.url }}')" title="Copy Link">
+            <button class="copy-link-button" onclick="copyLink('{{ image.image.url }}', event)" title="Copy Link">
                 <i class="fas fa-copy"></i> Link
             </button>
             <p class="text-center mt-2">{{ image.name }}</p>
@@ -78,13 +139,15 @@
     <div class="pagination mt-4">
         <span class="page-links">
             {% if images.has_previous %}
-            <a href="?page_{{ category }}={{ images.previous_page_number }}">Previous</a>
+            <a href="?page_{{ category }}={{ images.previous_page_number }}"
+                onclick="smoothScrollToSection(event, 'section-{{ category }}')">Previous</a>
             {% endif %}
             <span class="current">
                 Page {{ images.number }} of {{ images.paginator.num_pages }}.
             </span>
             {% if images.has_next %}
-            <a href="?page_{{ category }}={{ images.next_page_number }}">Next</a>
+            <a href="?page_{{ category }}={{ images.next_page_number }}"
+                onclick="smoothScrollToSection(event, 'section-{{ category }}')">Next</a>
             {% endif %}
         </span>
     </div>
@@ -92,84 +155,47 @@
 {% endfor %}
 
 <script>
-    function copyLink(url) {
+    function copyLink(url, event) {
+        // Prevent modal from opening when the copy link button is clicked
+        event.stopPropagation();
+
+        // Create a temporary element to hold the URL
         const tempInput = document.createElement('textarea');
         tempInput.value = url;
         document.body.appendChild(tempInput);
-        tempInput.focus();
-        tempInput.select();
 
         try {
-            const successful = document.execCommand('copy');
-            const msg = successful ? 'Link copied to clipboard!' : 'Unable to copy link.';
-            alert(msg);
+            tempInput.select();
+            document.execCommand('copy');
+            alert('Link copied to clipboard!');
         } catch (err) {
             console.error('Oops, unable to copy', err);
             alert('Failed to copy link.');
         }
 
+        // Clean up the temporary element
         document.body.removeChild(tempInput);
+    }
+
+    function smoothScrollToSection(event, sectionId) {
+        // Prevent the default action to prevent the page from jumping to the top
+        event.preventDefault();
+
+        // Scroll smoothly to the section after pagination
+        const section = document.getElementById(sectionId);
+        const sectionOffset = section ? section.offsetTop : 0;
+
+        window.scrollTo({
+            top: sectionOffset,
+            behavior: 'smooth'
+        });
+
+        // Delay the URL update to allow smooth scrolling to finish
+        setTimeout(() => {
+            window.location.href = event.currentTarget.href;
+        }, 300);
     }
 </script>
 
-<style>
-    .image-item {
-        position: relative;
-        overflow: hidden;
-    }
 
-    .copy-link-button {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: transparent;
-        border: none;
-        outline: 1px solid rgba(255, 255, 255, 0.7);
-        color: rgba(255, 255, 255, 0.7);
-        padding: 5px 10px;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: color 0.3s, outline 0.3s;
-        display: flex;
-        align-items: center;
-    }
-
-    .copy-link-button:hover {
-        color: rgba(255, 255, 255, 1);
-        outline: 1px solid rgba(255, 255, 255, 1);
-    }
-
-    .copy-link-button i {
-        margin-right: 5px;
-        font-size: 1rem;
-    }
-
-    .image-item img {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-
-    .image-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 15px;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .pagination .page-links a {
-        margin: 0 5px;
-        text-decoration: none;
-        color: #007bff;
-    }
-
-    .pagination .page-links .current {
-        font-weight: bold;
-    }
-</style>
 {% endblock %}
