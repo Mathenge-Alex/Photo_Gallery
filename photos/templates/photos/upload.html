@@ -1,12 +1,8 @@
-{% extends 'base.html' %}
-
-{% block title %}Upload Image | Photo Gallery{% endblock %}
-
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-8">
     <h2 class="my-5 text-center">Upload Your Image</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form id="image-upload-form" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group">
         {{ form.image.label_tag }}
@@ -38,6 +34,29 @@
       </div>
       <button type="submit" class="btn btn-primary btn-block">Upload</button>
     </form>
+    <div id="upload-message" class="mt-3"></div>
   </div>
 </div>
+
+<script>
+  const form = document.getElementById('image-upload-form');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+
+    fetch("{% url 'upload_image' %}", {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('upload-message').textContent = data.message;
+        form.reset();  // Reset the form after a successful upload
+      })
+      .catch(error => console.error('Error:', error));
+  });
+</script>
 {% endblock %}
