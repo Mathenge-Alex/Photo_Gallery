@@ -42,6 +42,7 @@
                 border-radius: 5px;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 transition: transform 0.2s ease;
+                cursor: pointer;
             }
 
             .image-item img:hover {
@@ -54,6 +55,17 @@
                 background-color: #343a40;
                 color: #ffffff;
                 text-align: center;
+            }
+
+            .modal-body img {
+                max-width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            .search-bar {
+                max-width: 500px;
+                margin: 0 auto 50px auto;
             }
         </style>
     </head>
@@ -74,9 +86,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'upload_image' %}">Upload Image</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'search_results' %}">Search</a>
                         </li>
                     </ul>
                 </div>
