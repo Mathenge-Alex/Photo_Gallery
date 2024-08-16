@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Image | Photo Gallery{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2 class="my-5 text-center">Upload Your Image</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.image.label_tag }}
+        {{ form.image }}
+      </div>
+      <div class="form-group">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+      </div>
+      <div class="form-group">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+      </div>
+      <div class="form-group">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+      </div>
+      <div class="form-group">
+        {{ form.new_category.label_tag }}
+        {{ form.new_category }}
+      </div>
+      <div class="form-group">
+        {{ form.location.label_tag }}
+        {{ form.location }}
+      </div>
+      <div class="form-group">
+        {{ form.new_location.label_tag }}
+        {{ form.new_location }}
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Upload</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
