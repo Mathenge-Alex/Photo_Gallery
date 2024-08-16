@@ -4,17 +4,172 @@
 
 {% block content %}
 <h1 class="my-5 text-center">Explore Our Collections</h1>
+
 {% for category, images in images_by_category.items %}
 <section class="category-section">
     <h2>{{ category }}</h2>
     <div class="image-grid">
         {% for image in images %}
-        <div class="image-item">
-            <img src="{{ image.image.url }}" alt="{{ image.name }}">
+        <div class="image-item position-relative" data-toggle="modal" data-target="#imageModal{{ image.id }}">
+            <img src="{{ image.image.url }}" alt="{{ image.name }}" loading="lazy">
+            <!-- Copy Link Button -->
+            <button class="copy-link-button" onclick="copyLink('{{ image.image.url }}')" title="Copy Link">
+                <i class="fas fa-copy"></i> Link
+            </button>
             <p class="text-center mt-2">{{ image.name }}</p>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="imageModal{{ image.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="imageModalLabel{{ image.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel{{ image.id }}">{{ image.name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="carousel{{ image.id }}" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for image in images %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ image.image.url }}" alt="{{ image.name }}">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>{{ image.name }}</h5>
+                                        <p>{{ image.description }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel{{ image.id }}" role="button"
+                                data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel{{ image.id }}" role="button"
+                                data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <p class="mt-3"><strong>Description:</strong> {{ image.description }}</p>
+                        <p><strong>Location:</strong> {{ image.location.name }}</p>
+                        <p><strong>Category:</strong> {{ image.category.name }}</p>
+                        <p><strong>Uploaded on:</strong> {{ image.upload_date|date:"F j, Y" }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        {% if request.user.is_staff %}
+                        <form method="POST" action="{% url 'delete_image' image.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        {% endif %}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
+
+    <!-- Pagination -->
+    <div class="pagination mt-4">
+        <span class="page-links">
+            {% if images.has_previous %}
+            <a href="?page_{{ category }}={{ images.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ images.number }} of {{ images.paginator.num_pages }}.
+            </span>
+            {% if images.has_next %}
+            <a href="?page_{{ category }}={{ images.next_page_number }}">Next</a>
+            {% endif %}
+        </span>
+    </div>
 </section>
 {% endfor %}
+
+<script>
+    function copyLink(url) {
+        const tempInput = document.createElement('textarea');
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.focus();
+        tempInput.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            const msg = successful ? 'Link copied to clipboard!' : 'Unable to copy link.';
+            alert(msg);
+        } catch (err) {
+            console.error('Oops, unable to copy', err);
+            alert('Failed to copy link.');
+        }
+
+        document.body.removeChild(tempInput);
+    }
+</script>
+
+<style>
+    .image-item {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .copy-link-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: transparent;
+        border: none;
+        outline: 1px solid rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.7);
+        padding: 5px 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: color 0.3s, outline 0.3s;
+        display: flex;
+        align-items: center;
+    }
+
+    .copy-link-button:hover {
+        color: rgba(255, 255, 255, 1);
+        outline: 1px solid rgba(255, 255, 255, 1);
+    }
+
+    .copy-link-button i {
+        margin-right: 5px;
+        font-size: 1rem;
+    }
+
+    .image-item img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pagination .page-links a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .pagination .page-links .current {
+        font-weight: bold;
+    }
+</style>
 {% endblock %}
