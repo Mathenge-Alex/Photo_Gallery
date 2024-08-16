@@ -67,6 +67,22 @@
                 max-width: 500px;
                 margin: 0 auto 50px auto;
             }
+
+        .dark-mode {
+        background-color: #121212;
+        color: #ffffff;
+    }
+    .dark-mode .navbar {
+        background-color: #1c1c1c;
+    }
+    .dark-mode .modal-content {
+        background-color: #2a2a2a;
+        color: #ffffff;
+    }
+    .dark-mode .btn-primary {
+        background-color: #4a4a4a;
+        border-color: #4a4a4a;
+    }
         </style>
     </head>
 
@@ -88,9 +104,22 @@
                             <a class="nav-link" href="{% url 'upload_image' %}">Upload Image</a>
                         </li>
                     </ul>
+                    <!-- Search Bar -->
+                    <form class="form-inline my-2 my-lg-0 ml-auto" method="GET" action="{% url 'search_results' %}">
+                        <input class="form-control mr-sm-2" type="search" name="category" placeholder="Search by category"
+                            aria-label="Search">
+                        <input class="form-control mr-sm-2" type="search" name="location" placeholder="Search by location"
+                            aria-label="Search">
+                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                    </form>
                 </div>
             </div>
+            <button id="darkModeToggle" class="btn btn-outline-light ml-3">Dark Mode</button>
+
         </nav>
+
+<button id="darkModeToggle" class="btn btn-outline-light ml-3">Dark Mode</button>
+
 
         <!-- Main Content -->
         <div class="container">
@@ -102,6 +131,26 @@
         <footer>
             <p>&copy; 2024 PhotoGallery. All Rights Reserved.</p>
         </footer>
+
+    <script>
+        const toggleButton = document.getElementById('darkModeToggle');
+        toggleButton.addEventListener('click', function () {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('dark-mode', 'enabled');
+                toggleButton.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('dark-mode', null);
+                toggleButton.textContent = 'Dark Mode';
+            }
+        });
+
+        // Load user's dark mode preference
+        if (localStorage.getItem('dark-mode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            toggleButton.textContent = 'Light Mode';
+        }
+    </script>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
