@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-%7th^k8i*wu5&q2_&=#f+$m&&i-xtgj(l-v)my9hd%p@!+%jnm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -107,7 +107,7 @@ DATABASES = {
 #             'HOST': config('DB_HOST'),
 #             'PORT': '',
 #         }
-        
+
 #     }
 #     # production
 # else:
@@ -173,10 +173,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-cloudinary.config( 
-    cloud_name = config('cloud_name'), 
-    api_key = config('api_key'), 
-    api_secret = config('api_secret'),
+cloudinary.config(
+    cloud_name = "do6nx2k8d",
+    api_key = "295785855114418",
+    api_secret = "GegSfX32WzDvwFCOIuH6axAO3aY",
     secure = True
     )
 
