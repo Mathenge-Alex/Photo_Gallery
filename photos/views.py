@@ -1,68 +1,31 @@
-import django
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from datetime import datetime
-from django.db.models import Q
-from .forms import UploadForm
-from .models import Image
-from django.db.models.base import ObjectDoesNotExist
-from django.http  import Http404
-import pyperclip as clip
+from .forms import ImageUploadForm
+from .models import Image, Category
 
-# Create your views here.
-
+def upload_image(request):
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = ImageUploadForm()
+    return render(request, 'upload.html', {'form': form})
 
 def home(request):
-    photos = Image.objects.all()
-    image_basket = {'photos':photos}
-    return render(request,'photos/home.html',image_basket)
-    
-def upload_picture(request):
-    
-    form = UploadForm()
-    if request.method == 'POST':
-        form = UploadForm(request.POST,request.FILES)
-        if form.is_valid():
-            image = form.save()
-            image.save()
-        
-            return redirect('/')
-    else:
-        form = UploadForm()
-    image_basket = {
-        'form':form
-    }
-    return render(request,'photos/upload_picture.html',image_basket)
+    categories = Category.objects.all()
+    images_by_category = {category.name: Image.objects.filter(category=category) for category in categories}
+
+    return render(request, 'home.html', {'images_by_category': images_by_category})
 
 def search_results(request):
-    if 'image' in request.GET and request.GET["image"]:
-        search_term = request.GET.get("image")
-        searched_photos = Image.search_by_category(search_term)
-        message = f"{search_term}"
-
-        return render(request, 'photos/search.html',{"message":message,"photos": searched_photos})
-
+    if 'category' in request.GET and request.GET["category"]:
+        search_term = request.GET.get("category")
+        searched_images = Image.search_by_category(search_term)
+    elif 'location' in request.GET and request.GET["location"]:
+        location_term = request.GET.get("location")
+        searched_images = Image.filter_by_location(location_term)
     else:
-        message = "Your search was not found. Enter a valid word."
-        return render(request, 'photos/search.html',{"message":message})
+        searched_images = Image.objects.all()
 
-
-def query_image(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
-    images = Image.objects.filter(
-        Q(category__name__icontains = q) |
-        Q(name__icontains = q) |
-        Q(description__icontains = q)
-        ) 
-    message = f"{q}"
-    return render(request, 'photos/search.html',{"message":message,"photos": images})
-
-def filter_location(request,location_id):
-    try:
-        locations = {'1':"Kenya",'2':"USA",'3':"Canada",'4':"China",'5':"Bahamas"}   
-    
-        filtered_photos = Image.objects.filter(location__name__icontains=locations.get(str(location_id))) 
-        message = f"{locations.get(location_id)}"
-    except  ObjectDoesNotExist:
-        raise Http404()
-    return render(request,'photos/filter_location.html',{"message":message,"photos": filtered_photos})
+    return render(request, 'search.html', {"images": searched_images})
