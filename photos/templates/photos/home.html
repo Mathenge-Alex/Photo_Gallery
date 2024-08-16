@@ -3,18 +3,70 @@
 {% block title %}Home | Photo Gallery{% endblock %}
 
 {% block content %}
+<!-- Search Bar -->
+<div class="search-bar my-5">
+    <form method="GET" action="{% url 'search_results' %}">
+        <div class="input-group">
+            <input type="text" name="category" class="form-control" placeholder="Search by category">
+            <input type="text" name="location" class="form-control" placeholder="Search by location">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 <h1 class="my-5 text-center">Explore Our Collections</h1>
 {% for category, images in images_by_category.items %}
 <section class="category-section">
     <h2>{{ category }}</h2>
     <div class="image-grid">
         {% for image in images %}
-        <div class="image-item">
+        <div class="image-item" data-toggle="modal" data-target="#imageModal{{ image.id }}">
             <img src="{{ image.image.url }}" alt="{{ image.name }}">
             <p class="text-center mt-2">{{ image.name }}</p>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="imageModal{{ image.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="imageModalLabel{{ image.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel{{ image.id }}">{{ image.name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ image.image.url }}" alt="{{ image.name }}">
+                        <p><strong>Description:</strong> {{ image.description }}</p>
+                        <p><strong>Location:</strong> {{ image.location.name }}</p>
+                        <p><strong>Category:</strong> {{ image.category.name }}</p>
+                        <p><strong>Uploaded on:</strong> {{ image.upload_date|date:"F j, Y" }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="copyLink('{{ image.image.url }}')">Copy
+                            Link</button>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
 </section>
 {% endfor %}
+
+<script>
+    function copyLink(url) {
+        var tempInput = document.createElement("input");
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Link copied to clipboard!");
+    }
+</script>
 {% endblock %}
