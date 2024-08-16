@@ -1,72 +1,17 @@
-{%extends 'base.html'%} {% block content %} {{ block.super}}
+{% extends 'base.html' %}
 
-<div class="container-fluid">
-  <div class="row p-4 mt-1">
-    <div class="mt-1">
-      {% if photos%}
-      <h5 class="text-center ">
-        <b>{{ photos|length }} {{message}} images Available</b>
-      </h5>
-      <hr />
-      {% else %}
-      <h5 class="text-center">
-        <b> No {{message}} images were found.</b>
-      </h5>
-      <hr />
-      {% endif %}
-    </div>
-    <div class="img-container">
-      {% for photo in photos %} {%if photo.image%}
+{% block title %}Search Results | Photo Gallery{% endblock %}
 
-      <div class="image col-md-4">
-        <div class="image-cont">
-          <img src="{{photo.image.url}}" alt="img" data-bs-toggle="modal" data-bs-target="#{{ photo }}" />
-        </div>
-      </div>
-
-      {%endif%}
-
-      <div class="modal fade" id="{{photo}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header m-0 p-2">
-              <h4 class="modal-title" id="{{photo.id}}">{{photo}}</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body m-0 p-3">
-              {%if photo.image%}
-              <div class="modal-photo">
-                <img src="{{photo.image.url}}" alt="img" data-bs-toggle="modal" data-bs-target="#{{ photo }}" />
-              </div>
-              <p class="text-center mt-2">{{photo.description}}</p>
-              <div class="tag mb-2">
-                <h5 class="text-info">Category: {{photo.category}}</h5>
-                <h5 class="text-primary">Location: {{photo.location}}</h5>
-              </div>
-
-              {%endif%}
-
-              <div class="d-flex mb-4">
-                <input class="form-control input-lg mr-1" type="text" value="{{photo.image.url}}"
-                  id="moz{{photo.id}}.url" />
-                <button class="btn btn-info btn-sm mr-1" onclick="mycopyFunc('moz{{photo.id}}.url')">
-                  <i class="far fa-copy"></i>
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" aria-label="Close">
-                  X
-                </button>
-              </div>
-              <!-- <
-            
-            -->
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {%endfor%}
-    </div>
+{% block content %}
+<h1 class="my-5 text-center">Search Results</h1>
+<div class="image-grid">
+  {% for image in images %}
+  <div class="image-item">
+    <img src="{{ image.image.url }}" alt="{{ image.name }}">
+    <p class="text-center mt-2">{{ image.name }}</p>
   </div>
+  {% empty %}
+  <p class="text-center">No images found matching your search criteria.</p>
+  {% endfor %}
 </div>
-
 {% endblock %}
