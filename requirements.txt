@@ -1,5 +1,4 @@
 asgiref==3.5.2
-# backports.zoneinfo==0.2.1
 beautifulsoup4==4.11.1
 bootstrap4==0.1.0
 certifi==2022.5.18.1
@@ -8,9 +7,12 @@ dj-database-url==0.5.0
 Django==4.0.4
 django-bootstrap4==22.1
 django-heroku==0.3.1
+Faker==27.0.0
 Pillow==9.1.1
-psycopg2-binary
+psycopg2==2.9.9
+psycopg2-binary==2.9.9
 pyperclip==1.8.2
+python-dateutil==2.9.0.post0
 python-decouple==3.6
 six==1.16.0
 soupsieve==2.3.2.post1
