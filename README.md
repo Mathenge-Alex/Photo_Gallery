@@ -1,6 +1,6 @@
 # Photo_Gallery
 
-A Gallery of my Favorite Photos
+A Gallery of my Favorite Photo
 
 ## Author
 
